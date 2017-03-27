@@ -40,4 +40,7 @@ public abstract class CalculatableObject {
 	 * @return the string of the type of CalculatableObjectType
 	 */
 	public abstract String getTypeString();
+	
+	@Override
+	public abstract String toString();
 }

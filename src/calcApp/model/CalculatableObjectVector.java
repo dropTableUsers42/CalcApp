@@ -12,7 +12,30 @@ import calcApp.model.Paranthesis.ParanthesisType;
  */
 public class CalculatableObjectVector {
 	
-	private Vector<CalculatableObject> objV;
+	public CalculatableObjectVector(){
+
+	}
+	
+	@Override
+	public String toString(){
+		String temp = new String("");
+		
+		for(CalculatableObject cTemp: this.objV){
+			temp+=cTemp.toString();
+		}
+		
+		return temp;
+	}
+	
+	private Vector<CalculatableObject> objV = new Vector<CalculatableObject>();
+	
+	public void add(int index, CalculatableObject e){
+		objV.add(index, e);
+	}
+	
+	public void add(CalculatableObject e){
+		objV.add(e);
+	}
 	
 	/**
 	 * Returns result as float
@@ -37,11 +60,13 @@ public class CalculatableObjectVector {
 	 * @param paranthesisLevel Maximum paranthesisLevel in objV
 	 * @return the ObjectVector passed, with the only element as the result Number
 	 */
-	public static Vector<CalculatableObject> calculateValue(Vector<CalculatableObject> objV, 
+	public static CalculatableObjectVector calculateValue(CalculatableObjectVector cObjV, 
 																			int paranthesisLevel){
 		
-		if(objV.size()==1){
-			return objV;
+		Vector<CalculatableObject> objV = cObjV.objV;
+		
+		if(objV.size()==1 || paranthesisLevel==0){
+			return cObjV;
 		}
 		
 		for(int i=0; i<objV.size(); i++){
@@ -50,6 +75,7 @@ public class CalculatableObjectVector {
 					&& ((Paranthesis)temp).getParanthesisType()==ParanthesisType.Opening
 					&& ((Paranthesis)temp).getParanthesisLevel()==paranthesisLevel){
 				
+				//System.out.print("Object Found");
 				//If (num) then resolve as num
 				if(objV.elementAt(i+2).getType()==CalculatableObjectType.Paranthesis
 						&&((Paranthesis)temp).getParanthesisType()==ParanthesisType.Closing){
@@ -75,8 +101,13 @@ public class CalculatableObjectVector {
 			}
 			
 		}
-		
-		return calculateValue(objV,paranthesisLevel-1);
+		System.out.print(objV.size());
+		return calculateValue(cObjV,paranthesisLevel-1);
+	}
+	
+	//TODO:Remove this
+	public Vector<CalculatableObject> getObjectVector(){
+		return this.objV;
 	}
 
 }

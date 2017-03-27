@@ -2,17 +2,36 @@ package calcApp.model;
 
 public class Paranthesis extends CalculatableObject {
 	
+	public Paranthesis(int paranthesisLevel, ParanthesisType pType){
+		this.paranthesisLevel = paranthesisLevel;
+		this.pType = pType;
+	}
+	
 	private CalculatableObjectType type = CalculatableObjectType.Paranthesis;
 	
 	private int paranthesisLevel;
 	
 	public static enum ParanthesisType{
-		Opening,
-		Closing
-		//TODO: Add method to get string if needed
+		Opening("("),
+		Closing(")");
+		
+		private String string;
+		
+		ParanthesisType(String string){
+			this.string = string;
+		}
+		
+		public String getParanthesisString(){
+			return this.string;
+		}
 	}
 	
 	private ParanthesisType pType;
+	
+	@Override
+	public String toString(){
+		return pType.getParanthesisString();
+	}
 	
 	@Override
 	public CalculatableObjectType getType(){

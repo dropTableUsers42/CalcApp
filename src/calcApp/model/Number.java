@@ -9,6 +9,11 @@ public class Number extends CalculatableObject {
 	private CalculatableObjectType type = CalculatableObjectType.Number;
 	
 	@Override
+	public String toString(){
+		return Float.toString(this.value);
+	}
+	
+	@Override
 	public CalculatableObjectType getType(){
 		return type;
 	}
