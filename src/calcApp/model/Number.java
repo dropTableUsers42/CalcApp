@@ -10,7 +10,12 @@ public class Number extends CalculatableObject {
 	
 	@Override
 	public String toString(){
-		return Float.toString(this.value);
+		String temp=Float.toString(this.value);
+		if(this.value<0){
+			temp="("+temp+")";
+		}
+		
+		return temp;
 	}
 	
 	@Override

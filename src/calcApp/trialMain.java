@@ -22,7 +22,7 @@ public class trialMain {
 		objV.add(new Operator(OperatorType.Multiply));
 		objV.add(new Number(3));
 		objV.add(new Operator(OperatorType.Plus));
-		objV.add(new Number(-4));
+		objV.add(new Number(-7));
 		objV.add(new Paranthesis(ParanthesisType.Closing));
 		//objV.add(new Paranthesis(ParanthesisType.Closing));
 		

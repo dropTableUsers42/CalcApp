@@ -61,7 +61,7 @@ public class CalculatableObjectVector {
 	 * Inserts paranthesis around the operator if the element at index is operator
 	 * @param index 
 	 */
-	public void insertParaAroundOperator(int index){
+	private void insertParaAroundOperator(int index){
 		
 		this.setParaLevels();
 		
@@ -108,7 +108,7 @@ public class CalculatableObjectVector {
 	/**
 	 * Inserts paranthesis around operators according to operator precedence
 	 */
-	public void insertPara(){
+	private void insertPara(){
 		for(int i=0; i<this.objV.size(); i++){
 			if(this.objV.elementAt(i).getType()==CalculatableObjectType.Operator
 				&& ((Operator)this.objV.elementAt(i)).getOperatorType()==OperatorType.Multiply){
@@ -149,7 +149,7 @@ public class CalculatableObjectVector {
 	 * @param paranthesisLevel Maximum paranthesisLevel in objV
 	 * @return the ObjectVector passed, with the only element as the result Number
 	 */
-	public static CalculatableObjectVector calculateValue(CalculatableObjectVector cObjV){
+	private static CalculatableObjectVector calculateValue(CalculatableObjectVector cObjV){
 		
 		cObjV.setParaLevels();
 		int paranthesisLevel = cObjV.maxParaLevel();
@@ -199,7 +199,7 @@ public class CalculatableObjectVector {
 	/**
 	 * Sets the paranthesisLevel of all parenthesis in the vector
 	 */
-	public void setParaLevels(){
+	private void setParaLevels(){
 		int level=0;
 		for(CalculatableObject temp: this.objV){
 			if(temp.getType()==CalculatableObjectType.Paranthesis
@@ -218,7 +218,7 @@ public class CalculatableObjectVector {
 	/**
 	 * @return The maximum paranthesisLevel in the Vector
 	 */
-	public int maxParaLevel(){
+	private int maxParaLevel(){
 		int maxLevel=0;
 		for(CalculatableObject temp: this.objV){
 			if(temp.getType()==CalculatableObjectType.Paranthesis){
