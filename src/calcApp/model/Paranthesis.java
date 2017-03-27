@@ -7,6 +7,11 @@ public class Paranthesis extends CalculatableObject {
 		this.pType = pType;
 	}
 	
+	public Paranthesis(ParanthesisType pType){
+		this.pType = pType;
+		this.paranthesisLevel = -1;
+	}
+	
 	private CalculatableObjectType type = CalculatableObjectType.Paranthesis;
 	
 	private int paranthesisLevel;
@@ -43,6 +48,13 @@ public class Paranthesis extends CalculatableObject {
 		return type.getTypeString();
 	}
 	
+	public void setParanthesisLevel(int level){
+		this.paranthesisLevel = level;
+	}
+	
+	/**
+	 * @return ParanthesisLevel if set, -1 otherwise
+	 */
 	public int getParanthesisLevel(){
 		return paranthesisLevel;
 	}
