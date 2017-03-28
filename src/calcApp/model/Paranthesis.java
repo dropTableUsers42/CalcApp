@@ -48,6 +48,12 @@ public class Paranthesis extends CalculatableObject {
 		return type.getTypeString();
 	}
 	
+	@Override
+	public Paranthesis clone(){
+		Paranthesis copy = new Paranthesis(this.paranthesisLevel, this.pType);
+		return copy;
+	}
+	
 	public void setParanthesisLevel(int level){
 		this.paranthesisLevel = level;
 	}

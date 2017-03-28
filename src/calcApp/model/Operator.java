@@ -42,10 +42,14 @@ public class Operator extends CalculatableObject {
 		return type.getTypeString();
 	}
 	
-	public OperatorType getOperatorType(){
-		return opType;
+	@Override
+	public Operator clone(){
+		Operator copy = new Operator(this.opType);
+		return copy;
 	}
 	
-	
+	public OperatorType getOperatorType(){
+		return opType;
+	}	
 
 }

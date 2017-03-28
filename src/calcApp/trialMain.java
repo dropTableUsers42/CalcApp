@@ -13,16 +13,14 @@ public class trialMain {
 		CalculatableObjectVector objV = new CalculatableObjectVector();
 		
 		//objV.add(new Paranthesis(ParanthesisType.Opening));
-		objV.add(new Number(2));
-		objV.add(new Operator(OperatorType.Multiply));
-		objV.add(new Number(3));
-		objV.add(new Operator(OperatorType.Divide));
-		objV.add(new Paranthesis(ParanthesisType.Opening));
-		objV.add(new Number(2));
-		objV.add(new Operator(OperatorType.Multiply));
-		objV.add(new Number(3));
+		objV.add(new Number(8));
 		objV.add(new Operator(OperatorType.Plus));
-		objV.add(new Number(-7));
+		objV.add(new Number(3));
+		objV.add(new Operator(OperatorType.Multiply));
+		objV.add(new Number(6));
+		objV.add(new Operator(OperatorType.Plus));
+		objV.add(new Paranthesis(ParanthesisType.Opening));
+		objV.add(new Number(5));
 		objV.add(new Paranthesis(ParanthesisType.Closing));
 		//objV.add(new Paranthesis(ParanthesisType.Closing));
 		

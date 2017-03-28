@@ -6,7 +6,7 @@ package calcApp.model;
  * @author Rwitaban Goswami
  * 
  */
-public abstract class CalculatableObject {
+public abstract class CalculatableObject implements Cloneable {
 	
 	/**
 	 * Enum enlisting type of CalculatableObject
@@ -43,4 +43,7 @@ public abstract class CalculatableObject {
 	
 	@Override
 	public abstract String toString();
+	
+	@Override
+	public abstract CalculatableObject clone();
 }

@@ -13,10 +13,19 @@ import calcApp.model.Paranthesis.ParanthesisType;
  * 
  * @author Rwitaban Goswami
  */
-public class CalculatableObjectVector {
+public class CalculatableObjectVector implements Cloneable {
 	
 	public CalculatableObjectVector(){
 
+	}
+	
+	@Override
+	public CalculatableObjectVector clone(){
+		CalculatableObjectVector copy = new CalculatableObjectVector();
+		for(CalculatableObject temp: this.objV){
+			copy.add(temp.clone());
+		}
+		return copy;
 	}
 	
 	@Override
@@ -38,6 +47,22 @@ public class CalculatableObjectVector {
 	
 	public void add(CalculatableObject e){
 		objV.add(e);
+	}
+	
+	public void remove(int index){
+		objV.remove(index);
+	}
+	
+	public void removeAllElements(){
+		objV.removeAllElements();
+	}
+	
+	public CalculatableObject elementAt(int index){
+		return objV.elementAt(index);
+	}
+	
+	public int size(){
+		return objV.size();
 	}
 	
 	/**
@@ -62,6 +87,10 @@ public class CalculatableObjectVector {
 	 * @param index 
 	 */
 	private void insertParaAroundOperator(int index){
+		
+		if(!isValid(this)){
+			return;
+		}
 		
 		this.setParaLevels();
 		
@@ -98,6 +127,7 @@ public class CalculatableObjectVector {
 						&& ((Paranthesis)this.objV.elementAt(i)).getParanthesisType()
 																	==ParanthesisType.Closing){
 					objV.insertElementAt(new Paranthesis(ParanthesisType.Closing), i+1);
+					break;
 				}
 			}
 		}
@@ -111,7 +141,7 @@ public class CalculatableObjectVector {
 	private void insertPara(){
 		for(int i=0; i<this.objV.size(); i++){
 			if(this.objV.elementAt(i).getType()==CalculatableObjectType.Operator
-				&& ((Operator)this.objV.elementAt(i)).getOperatorType()==OperatorType.Multiply){
+				&& ((Operator)this.objV.elementAt(i)).getOperatorType()==OperatorType.Divide){
 				
 				insertParaAroundOperator(i);
 				i++;
@@ -119,7 +149,7 @@ public class CalculatableObjectVector {
 		}
 		for(int i=0; i<this.objV.size(); i++){
 			if(this.objV.elementAt(i).getType()==CalculatableObjectType.Operator
-				&& ((Operator)this.objV.elementAt(i)).getOperatorType()==OperatorType.Divide){
+				&& ((Operator)this.objV.elementAt(i)).getOperatorType()==OperatorType.Multiply){
 				
 				insertParaAroundOperator(i);
 				i++;
@@ -165,7 +195,6 @@ public class CalculatableObjectVector {
 					&& ((Paranthesis)temp).getParanthesisType()==ParanthesisType.Opening
 					&& ((Paranthesis)temp).getParanthesisLevel()==paranthesisLevel){
 				
-				//System.out.print("Object Found");
 				//If (num) then resolve as num
 				if(objV.elementAt(i+2).getType()==CalculatableObjectType.Paranthesis){
 					
@@ -191,6 +220,9 @@ public class CalculatableObjectVector {
 		return calculateValue(cObjV);
 	}
 	
+	/**
+	 * replaces Vector with the Vector holding the final value
+	 */
 	public void calculateFinalValueOfVector(){
 		insertPara();
 		calculateValue(this);
@@ -232,6 +264,7 @@ public class CalculatableObjectVector {
 		
 		Vector<CalculatableObject> objV = cObjV.objV;
 		
+		//Check if Paranthesis are matched
 		int count=0;
 		for(int i=0; i<objV.size(); i++){
 			if(objV.elementAt(i).getType()==CalculatableObjectType.Paranthesis
@@ -244,7 +277,50 @@ public class CalculatableObjectVector {
 			}
 		}
 		
-		return count==0;
+		if(count!=0){
+			return false;
+		}
+		
+		
+		//Check if no empty paranthesis eg ()
+		for(int i=0; i<objV.size(); i++){
+			if(objV.elementAt(i).getType()==CalculatableObjectType.Paranthesis
+					&& ((Paranthesis)objV.elementAt(i)).getParanthesisType()==ParanthesisType.Opening){
+				
+				
+				if(objV.elementAt(i+1).getType()==CalculatableObjectType.Paranthesis
+					&& ((Paranthesis)objV.elementAt(i+1)).getParanthesisType()==ParanthesisType.Closing){
+					
+					return false;
+				}
+			}
+		}
+		
+		//Check if every operator has values to work upon
+		for(int i=0; i<objV.size(); i++){
+			
+			if(objV.elementAt(i).getType()==CalculatableObjectType.Operator){
+				
+				if(i==0 || i==objV.size()-1){
+					return false;
+				}
+				
+				if(objV.elementAt(i+1).getType()==CalculatableObjectType.Paranthesis
+						&& ((Paranthesis)objV.elementAt(i+1)).getParanthesisType()==ParanthesisType.Closing){
+					return false;
+				}
+				
+				if(objV.elementAt(i+1).getType()==CalculatableObjectType.Operator){
+					return false;
+				}
+				
+				if(objV.elementAt(i-1).getType()==CalculatableObjectType.Operator){
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 
 }

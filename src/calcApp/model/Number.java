@@ -34,4 +34,14 @@ public class Number extends CalculatableObject {
 		return value;
 	}
 	
+	public void setValue(float value){
+		this.value = value;
+	}
+	
+	@Override
+	public Number clone(){
+		Number copy = new Number(this.value);
+		return copy;
+	}
+	
 }
