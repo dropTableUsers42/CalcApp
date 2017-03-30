@@ -23,6 +23,7 @@ public class MainApp extends Application {
 	
 	public MainApp(){
 		caretPosition=0;
+		objV.setCaret(0);
 		decimalPosition=0;
 	}
 	
@@ -75,6 +76,7 @@ public class MainApp extends Application {
 	
 	public void setCaretPosition(int i){
 		caretPosition = i;
+		objV.setCaret(i);
 	}
 	
 	public int getCaretPosition(){

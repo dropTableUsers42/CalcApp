@@ -16,7 +16,11 @@ import calcApp.model.Paranthesis.ParanthesisType;
 public class CalculatableObjectVector implements Cloneable {
 	
 	public CalculatableObjectVector(){
-
+		caretPos=-1;
+	}
+	
+	public void setCaret(int caretPos){
+		this.caretPos = caretPos;
 	}
 	
 	@Override
@@ -25,6 +29,7 @@ public class CalculatableObjectVector implements Cloneable {
 		for(CalculatableObject temp: this.objV){
 			copy.add(temp.clone());
 		}
+		copy.caretPos=-1;
 		return copy;
 	}
 	
@@ -32,14 +37,53 @@ public class CalculatableObjectVector implements Cloneable {
 	public String toString(){
 		String temp = new String("");
 		
-		for(CalculatableObject cTemp: this.objV){
-			temp+=cTemp.toString();
+		if(caretPos>objV.size()){
+			caretPos=-1;
+		}
+		
+		if(caretPos==objV.size()){
+			caretPos=objV.size()-1;
+		}
+		
+		/*if(caretPos>=objV.size()){
+			caretPos=-2;
+		}
+		
+		int j=0;
+		
+		for(j=0; j<=caretPos; j++){
+			temp+=objV.elementAt(j).toString();
+		}
+		if(caretPos!=-1 && caretPos!=-2){
+			temp+="_";
+		}
+		for(int i=j+1; i<objV.size(); i++){
+			temp+=objV.elementAt(i).toString();
+		}
+		if(caretPos==-2){
+			temp+="_";
+		}*/
+		
+		if(caretPos==-1){
+			for(CalculatableObject ctemp: objV){
+				temp+=ctemp.toString();
+			}
+		} else{
+			for(int i=0; i<=caretPos; i++){
+				temp+=objV.elementAt(i).toString();
+			}
+			temp+="_";
+			for(int i=caretPos+1; i<objV.size();i++){
+				temp+=objV.elementAt(i).toString();
+			}
 		}
 		
 		return temp;
 	}
 	
 	private Vector<CalculatableObject> objV = new Vector<CalculatableObject>();
+	//Showing caret in string at this position, -1 if not
+	private int caretPos;
 	
 	public void add(int index, CalculatableObject e){
 		objV.add(index, e);

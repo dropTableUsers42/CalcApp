@@ -82,8 +82,10 @@ public class MainCalcViewController {
 	private CalculatableObjectVector objV;
 	private CalculatableObjectVector finalObjV;
 	
+	private boolean isMinus;
+	
 	public MainCalcViewController(){
-		
+		isMinus = false;
 	}
 	
 	@FXML
@@ -93,7 +95,6 @@ public class MainCalcViewController {
 	
 	@FXML
 	private void handleNumberButtonPressed(ActionEvent event){
-		result.setText("Hello");
 		float numToAdd=0;
 		try{
 			Button tempButton = (Button)event.getSource();
@@ -102,30 +103,7 @@ public class MainCalcViewController {
 			e.printStackTrace();
 		}
 		
-		Number currNumber;
-		
-		if(objV.size()!=0 &&
-				mainApp.getCaretPosition()<objV.size() &&
-				objV.elementAt(mainApp.getCaretPosition()).getType()==CalculatableObjectType.Number){
-			currNumber = (Number)objV.elementAt(mainApp.getCaretPosition());
-		} else{
-			currNumber = new Number(0);
-			objV.add(mainApp.getCaretPosition(), currNumber);
-			mainApp.setDecimalPosition(0);
-		}
-		
-		float f = currNumber.getValue();
-		int decimalPosition = mainApp.getDecimalPosition();
-		
-		if(decimalPosition==0){
-			currNumber.setValue(numToAdd+f*10);
-		} else{
-			for(int i=0; i<decimalPosition; i++){
-				numToAdd/=10;
-			}
-			currNumber.setValue(numToAdd+f);
-			mainApp.setDecimalPosition(decimalPosition+1);
-		}
+		addNumber(numToAdd);
 		showResult();
 		showStringEntered();
 	}
@@ -154,6 +132,7 @@ public class MainCalcViewController {
 		}
 		mainApp.setDecimalPosition(0);
 		mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
+		isMinus=false;
 		showStringEntered();
 	}
 	
@@ -173,6 +152,7 @@ public class MainCalcViewController {
 		}
 		mainApp.setDecimalPosition(0);
 		mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
+		isMinus=false;
 		showStringEntered();
 		showResult();
 		
@@ -183,8 +163,86 @@ public class MainCalcViewController {
 		objV.removeAllElements();
 		mainApp.setCaretPosition(0);
 		mainApp.setDecimalPosition(0);
+		isMinus=false;
 		showStringEntered();
 		showResult();
+	}
+	
+	@FXML
+	public void handleCEButtonPressed(){
+		if(objV.size()==0){
+			handleCButtonPressed();
+			return;
+		}
+		boolean isNumber = objV.elementAt(objV.size()-1).getType() == CalculatableObjectType.Number;
+		objV.remove(objV.size()-1);
+		if(isNumber){
+			mainApp.setCaretPosition(objV.size());
+		} else {
+			mainApp.setCaretPosition(objV.size()-1);
+		}
+		mainApp.setDecimalPosition(0);
+		isMinus=false;
+		showStringEntered();
+		showResult();
+	}
+	
+	@FXML
+	public void handlePlusMinusButtonPressed(){
+		this.isMinus = !isMinus;
+		if(objV.elementAt(mainApp.getCaretPosition()).getType()==CalculatableObjectType.Number){
+			float value = ((Number)objV.elementAt(mainApp.getCaretPosition())).getValue();
+			value = 0 - value;
+			objV.remove(mainApp.getCaretPosition());
+			objV.add(new Number(value));
+		}
+		showStringEntered();
+		showResult();
+	}
+	
+	@FXML
+	public void handleEqualsButtonPressed(){
+		objV.removeAllElements();
+		objV.add(finalObjV.elementAt(0));
+		showResult();
+		showStringEntered();
+		mainApp.setCaretPosition(0);
+		mainApp.setDecimalPosition(0);
+		isMinus=false;
+	}
+	
+	/**
+	 * Adds the number passed into the objV vector
+	 * @param numToAdd
+	 */
+	private void addNumber(float numToAdd){
+		Number currNumber;
+		if(isMinus){
+			numToAdd = 0 - numToAdd;
+		}
+		
+		if(objV.size()!=0 &&
+				mainApp.getCaretPosition()<objV.size() &&
+				objV.elementAt(mainApp.getCaretPosition()).getType()==CalculatableObjectType.Number){
+			currNumber = (Number)objV.elementAt(mainApp.getCaretPosition());
+		} else{
+			currNumber = new Number(0);
+			objV.add(mainApp.getCaretPosition(), currNumber);
+			mainApp.setDecimalPosition(0);
+		}
+		
+		float f = currNumber.getValue();
+		int decimalPosition = mainApp.getDecimalPosition();
+		
+		if(decimalPosition==0){
+			currNumber.setValue(numToAdd+f*10);
+		} else{
+			for(int i=0; i<decimalPosition; i++){
+				numToAdd/=10;
+			}
+			currNumber.setValue(numToAdd+f);
+			mainApp.setDecimalPosition(decimalPosition+1);
+		}
 	}
 	
 	/**
