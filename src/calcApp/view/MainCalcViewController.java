@@ -119,21 +119,11 @@ public class MainCalcViewController {
 		Button tempButton = (Button)event.getSource();
 		String opPressed = tempButton.getText();
 		char ch = opPressed.charAt(0);
-		if(objV.size()!=0 &&
-				objV.elementAt(objV.size()-1).getType()==CalculatableObjectType.Number){
-			mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
-		}
-		int pos = mainApp.getCaretPosition();
-		switch(ch){
-		case '+': objV.add(pos,new Operator(OperatorType.Plus)); break;
-		case '-': objV.add(pos,new Operator(OperatorType.Minus)); break;
-		case '*': objV.add(pos,new Operator(OperatorType.Multiply)); break;
-		case '/': objV.add(pos,new Operator(OperatorType.Divide)); break;
-		}
+		addOperator(ch);
 		mainApp.setDecimalPosition(0);
-		mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
 		isMinus=false;
 		showStringEntered();
+		showResult();
 	}
 	
 	@FXML
@@ -141,17 +131,8 @@ public class MainCalcViewController {
 		Button tempButton = (Button)event.getSource();
 		String paraPressed = tempButton.getText();
 		char ch = paraPressed.charAt(0);
-		if(objV.size()!=0 &&
-				objV.elementAt(objV.size()-1).getType()==CalculatableObjectType.Number){
-			mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
-		}
-		int pos = mainApp.getCaretPosition();
-		switch(ch){
-		case '(': objV.add(pos,new Paranthesis(ParanthesisType.Opening)); break;
-		case ')': objV.add(pos,new Paranthesis(ParanthesisType.Closing)); break;
-		}
+		addParanthesis(ch);
 		mainApp.setDecimalPosition(0);
-		mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
 		isMinus=false;
 		showStringEntered();
 		showResult();
@@ -174,13 +155,11 @@ public class MainCalcViewController {
 			handleCButtonPressed();
 			return;
 		}
-		boolean isNumber = objV.elementAt(objV.size()-1).getType() == CalculatableObjectType.Number;
-		objV.remove(objV.size()-1);
-		if(isNumber){
-			mainApp.setCaretPosition(objV.size());
-		} else {
-			mainApp.setCaretPosition(objV.size()-1);
+		if(mainApp.getCaretPosition()==0){
+			return;
 		}
+		objV.remove(mainApp.getCaretPosition()-1);
+		mainApp.setCaretPosition(mainApp.getCaretPosition()-1);
 		mainApp.setDecimalPosition(0);
 		isMinus=false;
 		showStringEntered();
@@ -190,11 +169,13 @@ public class MainCalcViewController {
 	@FXML
 	public void handlePlusMinusButtonPressed(){
 		this.isMinus = !isMinus;
-		if(objV.elementAt(mainApp.getCaretPosition()).getType()==CalculatableObjectType.Number){
-			float value = ((Number)objV.elementAt(mainApp.getCaretPosition())).getValue();
+		if(mainApp.getCaretPosition()==0){
+			return;
+		}
+		if(objV.elementAt(mainApp.getCaretPosition()-1).getType()==CalculatableObjectType.Number){
+			float value = ((Number)objV.elementAt(mainApp.getCaretPosition()-1)).getValue();
 			value = 0 - value;
-			objV.remove(mainApp.getCaretPosition());
-			objV.add(new Number(value));
+			((Number)objV.elementAt(mainApp.getCaretPosition()-1)).setValue(value);;
 		}
 		showStringEntered();
 		showResult();
@@ -204,11 +185,31 @@ public class MainCalcViewController {
 	public void handleEqualsButtonPressed(){
 		objV.removeAllElements();
 		objV.add(finalObjV.elementAt(0));
-		showResult();
-		showStringEntered();
-		mainApp.setCaretPosition(0);
+		mainApp.setCaretPosition(objV.size());
 		mainApp.setDecimalPosition(0);
 		isMinus=false;
+		showResult();
+		showStringEntered();
+	}
+	
+	@FXML
+	public void handlePrevButtonPressed(){
+		if(mainApp.getCaretPosition()==0){
+			return;
+		}
+		
+		mainApp.setCaretPosition(mainApp.getCaretPosition()-1);
+		showStringEntered();
+	}
+	
+	@FXML
+	public void handleNextButtonPressed(){
+		if(mainApp.getCaretPosition()==objV.size()){
+			return;
+		}
+		
+		mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
+		showStringEntered();
 	}
 	
 	/**
@@ -221,14 +222,27 @@ public class MainCalcViewController {
 			numToAdd = 0 - numToAdd;
 		}
 		
-		if(objV.size()!=0 &&
-				mainApp.getCaretPosition()<objV.size() &&
-				objV.elementAt(mainApp.getCaretPosition()).getType()==CalculatableObjectType.Number){
-			currNumber = (Number)objV.elementAt(mainApp.getCaretPosition());
-		} else{
+		int newPos;
+		
+		if(mainApp.getCaretPosition()==0){
 			currNumber = new Number(0);
-			objV.add(mainApp.getCaretPosition(), currNumber);
-			mainApp.setDecimalPosition(0);
+			objV.add(0,currNumber);
+			newPos=1;
+		} else if(mainApp.getCaretPosition()==objV.size()
+				&& objV.elementAt(objV.size()-1).getType()==CalculatableObjectType.Number){
+			currNumber = (Number)(objV.elementAt(objV.size()-1));
+			newPos=objV.size();
+		} else if(mainApp.getCaretPosition()==objV.size()) {
+			currNumber = new Number(0);
+			objV.add(currNumber);
+			newPos=objV.size();
+		} else if(objV.elementAt(mainApp.getCaretPosition()-1).getType()==CalculatableObjectType.Number){
+			currNumber = (Number)(objV.elementAt(mainApp.getCaretPosition()-1));
+			newPos = mainApp.getCaretPosition();
+		} else {
+			currNumber = new Number(0);
+			objV.add(mainApp.getCaretPosition(),currNumber);
+			newPos = mainApp.getCaretPosition()+1;
 		}
 		
 		float f = currNumber.getValue();
@@ -243,6 +257,41 @@ public class MainCalcViewController {
 			currNumber.setValue(numToAdd+f);
 			mainApp.setDecimalPosition(decimalPosition+1);
 		}
+		mainApp.setCaretPosition(newPos);
+	}
+	
+	private void addOperator(char ch){
+		Operator op;
+		switch(ch){
+		case '+': op = new Operator(OperatorType.Plus); break;
+		case '-': op = new Operator(OperatorType.Minus); break;
+		case '/': op = new Operator(OperatorType.Divide); break;
+		case '*': op = new Operator(OperatorType.Multiply); break;
+		default: op = new Operator(OperatorType.Plus); break;
+		}
+		
+		if(mainApp.getCaretPosition()==objV.size()){
+			objV.add(op);
+		} else {
+			objV.add(mainApp.getCaretPosition(),op);
+		}
+		mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
+	}
+	
+	private void addParanthesis(char ch){
+		Paranthesis para;
+		switch(ch){
+		case ')': para = new Paranthesis(ParanthesisType.Closing); break;
+		case '(': para = new Paranthesis(ParanthesisType.Opening); break;
+		default: para = new Paranthesis(ParanthesisType.Closing); break;
+		}
+		
+		if(mainApp.getCaretPosition()==objV.size()){
+			objV.add(para);
+		} else {
+			objV.add(mainApp.getCaretPosition(),para);
+		}
+		mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
 	}
 	
 	/**

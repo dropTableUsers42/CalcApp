@@ -48,9 +48,9 @@
             <Button fx:id="buttonCE" focusTraversable="false" mnemonicParsing="false" onAction="#handleCEButtonPressed" prefHeight="35.0" prefWidth="45.0" text="CE" GridPane.columnIndex="1" />
             <Button fx:id="buttonC" focusTraversable="false" mnemonicParsing="false" onAction="#handleCButtonPressed" prefHeight="35.0" prefWidth="45.0" text="C" />
             <Button fx:id="buttonEquals" focusTraversable="false" mnemonicParsing="false" onAction="#handleEqualsButtonPressed" prefHeight="35.0" prefWidth="45.0" text="=" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Button fx:id="buttonPrev" focusTraversable="false" mnemonicParsing="false" prefHeight="35.0" prefWidth="45.0" text="&lt;-" GridPane.rowIndex="5" />
+            <Button fx:id="buttonPrev" focusTraversable="false" mnemonicParsing="false" onAction="#handlePrevButtonPressed" prefHeight="35.0" prefWidth="45.0" text="&lt;-" GridPane.rowIndex="5" />
             <Button fx:id="buttonDecimal" focusTraversable="false" mnemonicParsing="false" onAction="#handleDecimalButtonPressed" prefHeight="35.0" prefWidth="45.0" text="." GridPane.columnIndex="3" GridPane.rowIndex="5" />
-            <Button fx:id="buttonNext" focusTraversable="false" mnemonicParsing="false" prefHeight="35.0" prefWidth="45.0" text="-&gt;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Button fx:id="buttonNext" focusTraversable="false" mnemonicParsing="false" onAction="#handleNextButtonPressed" prefHeight="35.0" prefWidth="45.0" text="-&gt;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
          </children>
       </GridPane>
       <TextField fx:id="stringEntered" alignment="TOP_RIGHT" editable="false" prefHeight="85.0" prefWidth="189.0" text="(1+2)" AnchorPane.bottomAnchor="255.0" AnchorPane.leftAnchor="32.5" AnchorPane.rightAnchor="32.5">
