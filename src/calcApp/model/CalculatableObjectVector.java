@@ -41,9 +41,9 @@ public class CalculatableObjectVector implements Cloneable {
 			caretPos=-1;
 		}
 		
-		if(caretPos==objV.size()){
+		/*if(caretPos==objV.size()){
 			caretPos=objV.size()-1;
-		}
+		}*/
 		
 		/*if(caretPos>=objV.size()){
 			caretPos=-2;
@@ -69,11 +69,11 @@ public class CalculatableObjectVector implements Cloneable {
 				temp+=ctemp.toString();
 			}
 		} else{
-			for(int i=0; i<=caretPos; i++){
+			for(int i=0; i<caretPos; i++){
 				temp+=objV.elementAt(i).toString();
 			}
 			temp+="_";
-			for(int i=caretPos+1; i<objV.size();i++){
+			for(int i=caretPos; i<objV.size();i++){
 				temp+=objV.elementAt(i).toString();
 			}
 		}
@@ -361,6 +361,13 @@ public class CalculatableObjectVector implements Cloneable {
 				if(objV.elementAt(i-1).getType()==CalculatableObjectType.Operator){
 					return false;
 				}
+			}
+		}
+		
+		for(int i=0; i<objV.size()-1; i++){
+			if(objV.elementAt(i).getType()==CalculatableObjectType.Number
+					&&objV.elementAt(i+1).getType()==CalculatableObjectType.Number){
+				return false;
 			}
 		}
 		
