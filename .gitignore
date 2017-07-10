@@ -47,5 +47,5 @@ Temporary Items
 .apdisk
 
 #class files
-.*class
+.class
 
