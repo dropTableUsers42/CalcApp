@@ -10,11 +10,15 @@ public class Number extends CalculatableObject {
 	
 	@Override
 	public String toString(){
-		String temp=Float.toString(this.value);
+		String temp;
+		if(this.value==(long)this.value){
+			temp=String.format("%d", (long)this.value);
+		} else {
+			temp=Float.toString(this.value);
+		}
 		if(this.value<0){
 			temp="("+temp+")";
 		}
-		
 		return temp;
 	}
 	

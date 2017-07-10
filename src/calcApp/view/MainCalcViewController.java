@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import calcApp.MainApp;
+import calcApp.model.CalculatableObject;
 import calcApp.model.CalculatableObject.CalculatableObjectType;
 import calcApp.model.CalculatableObjectVector;
 import calcApp.model.Number;
@@ -95,15 +96,12 @@ public class MainCalcViewController {
 	
 	@FXML
 	private void handleNumberButtonPressed(ActionEvent event){
-		float numToAdd=0;
-		try{
-			Button tempButton = (Button)event.getSource();
-			numToAdd = Float.parseFloat(tempButton.getText());
-		} catch(NumberFormatException e){
-			e.printStackTrace();
-		}
+		char num = '0';
 		
-		addNumber(numToAdd);
+		Button tempButton = (Button)event.getSource();
+		num = tempButton.getText().charAt(0);
+		
+		addNumber(num);
 		showResult();
 		showStringEntered();
 	}
@@ -200,6 +198,7 @@ public class MainCalcViewController {
 		
 		mainApp.setCaretPosition(mainApp.getCaretPosition()-1);
 		showStringEntered();
+		setDecimalPos();
 	}
 	
 	@FXML
@@ -210,17 +209,36 @@ public class MainCalcViewController {
 		
 		mainApp.setCaretPosition(mainApp.getCaretPosition()+1);
 		showStringEntered();
+		setDecimalPos();
+	}
+	
+	private void setDecimalPos(){
+		if(mainApp.getCaretPosition()!=0){
+			CalculatableObject obj = objV.elementAt(mainApp.getCaretPosition()-1);
+			if(obj.getType()==CalculatableObjectType.Number){
+				int pos=0;
+				for(int i=0; i<obj.toString().length(); i++){
+					if(obj.toString().charAt(i)=='.'){
+						pos=i;
+						break;
+					}
+				}
+				isMinus = ((Number)obj).getValue()<0;
+				if(isMinus){
+					mainApp.setDecimalPosition(obj.toString().length()-pos-1);
+				} else {
+					mainApp.setDecimalPosition(obj.toString().length()-pos);
+				}
+			}
+		}
 	}
 	
 	/**
 	 * Adds the number passed into the objV vector
 	 * @param numToAdd
 	 */
-	private void addNumber(float numToAdd){
+	private void addNumber(char numToAdd){
 		Number currNumber;
-		if(isMinus){
-			numToAdd = 0 - numToAdd;
-		}
 		
 		int newPos;
 		
@@ -245,18 +263,24 @@ public class MainCalcViewController {
 			newPos = mainApp.getCaretPosition()+1;
 		}
 		
-		float f = currNumber.getValue();
-		int decimalPosition = mainApp.getDecimalPosition();
-		
-		if(decimalPosition==0){
-			currNumber.setValue(numToAdd+f*10);
-		} else{
-			for(int i=0; i<decimalPosition; i++){
-				numToAdd/=10;
-			}
-			currNumber.setValue(numToAdd+f);
-			mainApp.setDecimalPosition(decimalPosition+1);
+		float value = ((Number)currNumber).getValue();
+		String numString;
+		if(value==(long)value){
+			numString = String.format("%d", (long)value);
+		} else {
+			numString=Float.toString(value);
 		}
+		if(mainApp.getDecimalPosition()==1){
+			numString+='.';
+			mainApp.setDecimalPosition(mainApp.getDecimalPosition()+1);
+		}
+		if(numString=="0"){
+			numString = String.valueOf(numToAdd);
+		} else {
+			numString += numToAdd;
+		}
+		float newNum = Float.parseFloat(numString);
+		currNumber.setValue(newNum);
 		mainApp.setCaretPosition(newPos);
 	}
 	

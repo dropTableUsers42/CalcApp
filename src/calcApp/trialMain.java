@@ -10,7 +10,7 @@ import calcApp.model.Paranthesis.ParanthesisType;
 public class trialMain {
 
 	public static void main(String[] args) {
-		CalculatableObjectVector objV = new CalculatableObjectVector();
+		/*CalculatableObjectVector objV = new CalculatableObjectVector();
 		
 		//objV.add(new Paranthesis(ParanthesisType.Opening));
 		objV.add(new Number(8));
@@ -28,7 +28,14 @@ public class trialMain {
 		
 		objV.calculateFinalValueOfVector();
 		
-		System.out.print(objV);
+		System.out.print(objV);*/
+		float cnst = 0.01f;
+		cnst = cnst / 10;
+		//int decimalPosition = 2;
+		/*for(int i=0; i<decimalPosition; i++){
+			cnst/=10;
+		}*/
+		System.out.println(cnst);
 		
 	}
 
